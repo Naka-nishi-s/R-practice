@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import axios from "axios";
 
-function App() {
-  const [count, setCount] = useState(0)
+// 取得データのタイプ
+type Data = {
+  id: number;
+  name: string;
+};
+
+const App = () => {
+  // カウンタ
+  const [count, setCount] = useState(0);
+
+  // データ
+  const [userData, setUserData] = useState<Data[]>([]);
+
+  // カウンタを増やす
+  const handleCount = (): void => {
+    setCount(count + 1);
+  };
+
+  //データ取得
+  const getData = () => {
+    axios
+      .get("http://localhost:8081/sample")
+      .then((response) => {
+        setUserData(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+      <h2>カウンタ:{count}</h2>
+      <button onClick={handleCount}>sample</button>
 
-export default App
+      <h2>データ取得ボタン</h2>
+      <button onClick={getData}>データ取得</button>
+      {userData.map((data) => (
+        <ul key={data.id}>
+          <li>{data.id}</li>
+          <li>{data.name}</li>
+        </ul>
+      ))}
+    </div>
+  );
+};
+
+export default App;
