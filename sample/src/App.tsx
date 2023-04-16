@@ -9,21 +9,13 @@ type Data = {
 };
 
 const App = () => {
-  // カウンタ
-  const [count, setCount] = useState(0);
-
   // データ
   const [userData, setUserData] = useState<Data[]>([]);
-
-  // カウンタを増やす
-  const handleCount = (): void => {
-    setCount(count + 1);
-  };
 
   //データ取得
   const getData = () => {
     axios
-      .get("http://localhost:8081/sample")
+      .get("/sample")
       .then((response) => {
         setUserData(response.data);
       })
@@ -34,9 +26,6 @@ const App = () => {
 
   return (
     <div className="App">
-      <h2>カウンタ:{count}</h2>
-      <button onClick={handleCount}>sample</button>
-
       <h2>データ取得ボタン</h2>
       <button onClick={getData}>データ取得</button>
       {userData.map((data) => (
